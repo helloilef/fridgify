@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fridgify</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="icon" type="image/png" href="assets/bibimbap.png" />
+  </head>
+  <body>
+    <header>
+      <nav class="header__nav">
+        <div class="header__logo">
+          <h4>Fridgify</h4>
+          <div class="header__logo-overlay"></div>
+        </div>
+
+        <ul class="header__menu">
+          <li>
+            <a href="#fridge">Fridge</a>
+          </li>
+          <li>
+            <a href="#recipes">Recipes</a>
+          </li>
+          <li>
+            <a href="#about-us">About Us</a>
+          </li>
+          <li>
+            <a href="#" id="login">Login</a>
+          </li>
+          <li>
+            <img src="assets/search.svg" alt="search" />
+          </li>
+        </ul>
+
+        <ul class="header__menu-mobile">
+          <li><img src="assets/menu.svg" alt="menu" /></li>
+        </ul>
+      </nav>
+    </header>
+
+    <!-- Login  -->
+    <div id="login-form" class="hidden">
+      <div class="login-container">
+        <span class="close-btn">&times;</span>
+        <!-- Close Button -->
+        <h2>Login</h2>
+        <form action="" method="POST">
+          <label for="username">Username:</label>
+          <input type="text" name="username" id="username" required />
+          <label for="password">Password:</label>
+          <input type="password" name="password" id="password" required />
+          <button type="submit" id="login-btn">Login</button>
+        </form>
+      </div>
+    </div>
+    <section class="hero">
+      <div class="hero-image">
+        <img
+          src="assets/output-onlinepngtools.png"
+          alt="food"
+          data-aos="zoom-in"
+        />
+
+        <div class="hero-image__overlay"></div>
+      </div>
+      <div class="hero-content">
+        <div class="hero-content-info" data-aos="fade-left">
+          <h1>Your own online fridge</h1>
+          <p>
+            Fridgify is a web application that helps you manage your fridge
+            contents and find recipes based on what you have.
+          </p>
+        </div>
+        <div class="hero-content__buttons">
+          <button class="hero-content__cook-button">Cook Now</button>
+          <button class="hero-content__signUp-button">Sign Up</button>
+        </div>
+        <div class="hero-content__testimonial" data-aos="fade-up">
+          <div class="hero-content__customer flex-center">
+            <h4>24<span>k+</span></h4>
+            <p>Happy Customers</p>
+          </div>
+
+          <div class="hero-content__review">
+            <img src="assets/user.png" alt="user" />
+            <p>
+              "My meals are very diverse now! I can cook anything I want with
+              the ingredients I have in my fridge. I love Fridgify!"
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="about-us" id="about-us">
+      <div class="about-us__image">
+        <div class="about-us__image-3">
+          <img src="assets/sushi-3.png" alt="sushi" data-aos="fade-right" />
+        </div>
+
+        <button class="about-us__button">
+          Learn More
+
+          <img src="assets/arrow-up-right.svg" alt="learn more" />
+        </button>
+
+        <div class="about-us__image-sushi2">
+          <img src="assets/sushi-2.png" alt="sushi" data-aos="fade-right" />
+        </div>
+      </div>
+
+      <div class="about-us__content" data-aos="fade-left">
+        <p class="food__subtitle">About Us</p>
+        <h3 class="food__title">
+          Our mission is to help you make the most of your fridge and reduce
+          food waste.
+        </h3>
+        <p class="food__description">
+          We will continue to provide the best experience for our customers.
+        </p>
+      </div>
+    </section>
+
+    <section class="fridge-inventory" id="fridge">
+      <h2 class="fridge-inventory__title" data-aos="flip-up">
+        Fridge Inventory
+      </h2>
+
+      <div
+        class="fridge-inventory__filters sushi__hide-scrollbar"
+        data-aos="fade-up"
+      >
+        <button class="fridge-inventory__filter-btn active">All</button>
+        <button class="fridge-inventory__filter-btn">
+          <img src="/assets/sushi-9.png" alt="sushi 9" />
+          Sushi
+        </button>
+        <button class="fridge-inventory__filter-btn">
+          <img src="/assets/sushi-8.png" alt="sushi 8" />
+          Ramen
+        </button>
+        <button class="fridge-inventory__filter-btn">
+          <img src="/assets/sushi-7.png" alt="sushi 7" />
+          Udon
+        </button>
+        <button class="fridge-inventory__filter-btn">
+          <img src="/assets/sushi-6.png" alt="sushi 6" />
+          Danggo
+        </button>
+        <button class="fridge-inventory__filter-btn">All</button>
+      </div>
+
+      <div class="fridge-inventory__catalogue" data-aos="fade-up">
+        <article class="fridge-inventory__card">
+          <img
+            class="fridge-inventory__card-image"
+            src="assets/sushi-12.png"
+            alt="sushi-12"
+          />
+          <h4 class="fridge-inventory__card-title">Chezu Sushi</h4>
+
+          <div class="fridge-inventory__card-details flex-between">
+            <div class="fridge-inventory__card-rating">
+              <img src="assets/star.svg" alt="star" />
+              <p>4.9</p>
+            </div>
+
+            <p class="fridge-inventory__card-price">$21.00</p>
+          </div>
+        </article>
+
+        <article class="fridge-inventory__card active-card">
+          <img
+            class="fridge-inventory__card-image"
+            src="assets/sushi-11.png"
+            alt="sushi-11"
+          />
+          <h4 class="fridge-inventory__card-title">Original Sushi</h4>
+
+          <div class="fridge-inventory__card-details flex-between">
+            <div class="fridge-inventory__card-rating">
+              <img src="assets/star.svg" alt="star" />
+              <p>5.0</p>
+            </div>
+
+            <p class="fridge-inventory__card-price">$19.00</p>
+          </div>
+        </article>
+
+        <article class="fridge-inventory__card">
+          <img
+            class="fridge-inventory__card-image"
+            src="assets/sushi-10.png"
+            alt="sushi-10"
+          />
+          <h4 class="fridge-inventory__card-title">Ramen Legendo</h4>
+
+          <div class="fridge-inventory__card-details flex-between">
+            <div class="fridge-inventory__card-rating">
+              <img src="assets/star.svg" alt="star" />
+              <p>4.7</p>
+            </div>
+
+            <p class="fridge-inventory__card-price">$13.00</p>
+          </div>
+        </article>
+      </div>
+
+      <button class="fridge-inventory__button">
+        <a href="/fridge.html">Explore Inventory</a>
+        <img src="assets/arrow-right.svg" alt="arrow-right" />
+      </button>
+    </section>
+
+    <section class="recipes" id="recipes">
+      <section class="recipes-food">
+        <div class="recipes__content" data-aos="fade-right">
+          <p class="food__subtitle">food Recipes</p>
+
+          <h3 class="food__title">Japanese Sushi</h3>
+          <p class="food__description">
+            Feel the taste of the most delicious Sushi.
+          </p>
+
+          <ul class="recipes__list flex-between">
+            <li>
+              <div class="recipes__icon flex-center">
+                <img src="assets/check.svg" alt="check" />
+              </div>
+              <p>
+                Cook sushi rice and season it with rice vinegar, sugar, and
+                salt.
+              </p>
+            </li>
+            <li>
+              <div class="recipes__icon flex-center">
+                <img src="assets/check.svg" alt="check" />
+              </div>
+              <p>Prepare fillings like fresh fish, avocado, and cucumber.</p>
+            </li>
+            <li>
+              <div class="recipes__icon flex-center">
+                <img src="assets/check.svg" alt="check" />
+              </div>
+              <p>
+                Roll ingredients in a seaweed sheet (nori) using a bamboo mat.
+              </p>
+            </li>
+            <li>
+              <div class="recipes__icon flex-center">
+                <img src="assets/check.svg" alt="check" />
+              </div>
+              <p>
+                Slice into bite-sized pieces and serve with soy sauce, wasabi,
+                and ginger.
+              </p>
+            </li>
+          </ul>
+        </div>
+
+        <div class="recipes__image flex-center">
+          <img src="assets/sushi-5.png" alt="sushi-5" data-aos="fade-left" />
+
+          <div class="recipes__arrow recipes__arrow-left">
+            <img src="assets/arrow-vertical.svg" alt="arrow vertical" />
+          </div>
+
+          <div class="recipes__arrow recipes__arrow-bottom">
+            <img src="assets/arrow-horizontal.svg" alt="arrow horizontal" />
+          </div>
+        </div>
+      </section>
+
+      <div class="recipes__discover" data-aos="zoom-in">
+        <p>Discover</p>
+      </div>
+
+      <section class="recipes-drinks">
+        <div class="recipes__image flex-center">
+          <img src="assets/sushi-4.png" alt="sushi-4" data-aos="fade-right" />
+
+          <div class="recipes__arrow recipes__arrow-top">
+            <img src="assets/arrow-horizontal.svg" alt="arrow horizontal" />
+          </div>
+
+          <div class="recipes__arrow recipes__arrow-right">
+            <img src="assets/arrow-vertical.svg" alt="arrow vertical" />
+          </div>
+        </div>
+
+        <div class="recipes__content" data-aos="fade-left">
+          <p class="food__subtitle">Drink Recipe</p>
+
+          <h3 class="food__title">Japanese Drinks</h3>
+          <p class="food__description">
+            Feel the taste of the most delicious drinks.
+          </p>
+
+          <ul class="recipes__list flex-between">
+            <li>
+              <div class="recipes__icon flex-center">
+                <img src="assets/check.svg" alt="check" />
+              </div>
+              <p>Boil water and steep green tea leaves or sakura blossoms.</p>
+            </li>
+            <li>
+              <div class="recipes__icon flex-center">
+                <img src="assets/check.svg" alt="check" />
+              </div>
+              <p>Sweeten with honey or sugar if desired.</p>
+            </li>
+            <li>
+              <div class="recipes__icon flex-center">
+                <img src="assets/check.svg" alt="check" />
+              </div>
+              <p>Chill or serve hot, depending on preference.</p>
+            </li>
+            <li>
+              <div class="recipes__icon flex-center">
+                <img src="assets/check.svg" alt="check" />
+              </div>
+              <p>Enjoy with a slice of lemon or a few ice cubes.</p>
+            </li>
+          </ul>
+        </div>
+      </section>
+    </section>
+
+    <footer class="footer flex-between">
+      <h3 class="footer__logo"><span>Fridg</span>ify</h3>
+
+      <ul class="footer__nav">
+        <li>
+          <a href="#fridge">Fridge</a>
+        </li>
+        <li>
+          <a href="#recipes">Recipes</a>
+        </li>
+        <li>
+          <a href="#about-us">About Us</a>
+        </li>
+        <li>
+          <a href="#">Up</a>
+        </li>
+      </ul>
+
+      <ul class="footer__social">
+        <li class="flex-center">
+          <img src="assets/facebook.svg" alt="facebook" />
+        </li>
+        <li class="flex-center">
+          <img src="assets/instagram.svg" alt="instagram" />
+        </li>
+        <li class="flex-center">
+          <img src="assets/twitter.svg" alt="twitter" />
+        </li>
+      </ul>
+    </footer>
+    <script src="js/script.js" type="module"></script>
+  </body>
+</html>
