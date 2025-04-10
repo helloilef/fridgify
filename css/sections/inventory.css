@@ -106,6 +106,7 @@
 }
 
 .fridge-inventory__card {
+  position: relative;
   padding: 38px;
   min-width: 260px;
   height: fit-content;
@@ -195,4 +196,60 @@
 .fridge-inventory__card.active-card .fridge-inventory__card-price {
   font-size: 24px;
   color: var(--secondary-color);
+}
+
+.fridge-inventory__catalogue1 {
+  margin-top: 64px;
+
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Three cards per row */
+  gap: 56px; /* Space between cards */
+
+  justify-content: center;
+  align-items: flex-start;
+}
+.fridge-inventory1 {
+  padding: 64px;
+
+  display: flex;
+  flex-direction: column;
+
+  background-color: var(--primary-color);
+
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover; /* Adjust background size if needed */
+
+  height: 100vh; /* Full viewport height */
+  overflow-y: auto; /* Enable vertical scrolling */
+}
+
+#add-item-form {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  background: white;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  z-index: 1000;
+}
+
+.hidden {
+  display: none;
+}
+
+.update-btn {
+  background-color: var(--secondary-color); /* Green */
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 25px;
 }

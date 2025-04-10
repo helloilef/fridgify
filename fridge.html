@@ -17,16 +17,16 @@
 
         <ul class="header__menu">
           <li>
-            <a href="#fridge">Fridge</a>
+            <a href="index.html">Home</a>
           </li>
           <li>
-            <a href="#recipes">Recipes</a>
+            <a href="fridge.html">Fridge</a>
           </li>
           <li>
-            <a href="#about-us">About Us</a>
+            <a href="recipes.html">Recipes</a>
           </li>
           <li>
-            <a href="#" id="login">Login</a>
+            <a href="index.html/#about-us">About Us</a>
           </li>
           <li>
             <img src="assets/search.svg" alt="search" />
@@ -39,89 +39,52 @@
       </nav>
     </header>
 
-    <section class="fridge-inventory" id="fridge">
+    <section class="fridge-inventory1" id="fridge">
       <h2 class="fridge-inventory__title">Fridge Inventory</h2>
-      <div class="fridge-inventory__filters sushi__hide-scrollbar">
-        <button class="fridge-inventory__filter-btn active">All</button>
-        <button class="fridge-inventory__filter-btn">
-          <img src="/assets/sushi-9.png" alt="sushi 9" />
-          Sushi
-        </button>
-        <button class="fridge-inventory__filter-btn">
-          <img src="/assets/sushi-8.png" alt="sushi 8" />
-          Ramen
-        </button>
-        <button class="fridge-inventory__filter-btn">
-          <img src="/assets/sushi-7.png" alt="sushi 7" />
-          Udon
-        </button>
-        <button class="fridge-inventory__filter-btn">
-          <img src="/assets/sushi-6.png" alt="sushi 6" />
-          Danggo
-        </button>
-        <button class="fridge-inventory__filter-btn">All</button>
-      </div>
-
-      <div class="fridge-inventory__catalogue">
-        <article class="fridge-inventory__card">
-          <img
-            class="fridge-inventory__card-image"
-            src="assets/sushi-12.png"
-            alt="sushi-12"
-          />
-          <h4 class="fridge-inventory__card-title">Chezu Sushi</h4>
-
-          <div class="fridge-inventory__card-details flex-between">
-            <div class="fridge-inventory__card-rating">
-              <img src="assets/star.svg" alt="star" />
-              <p>4.9</p>
-            </div>
-
-            <p class="fridge-inventory__card-price">$21.00</p>
-          </div>
-        </article>
-
-        <article class="fridge-inventory__card active-card">
-          <img
-            class="fridge-inventory__card-image"
-            src="assets/sushi-11.png"
-            alt="sushi-11"
-          />
-          <h4 class="fridge-inventory__card-title">Original Sushi</h4>
-
-          <div class="fridge-inventory__card-details flex-between">
-            <div class="fridge-inventory__card-rating">
-              <img src="assets/star.svg" alt="star" />
-              <p>5.0</p>
-            </div>
-
-            <p class="fridge-inventory__card-price">$19.00</p>
-          </div>
-        </article>
-
-        <article class="fridge-inventory__card">
-          <img
-            class="fridge-inventory__card-image"
-            src="assets/sushi-10.png"
-            alt="sushi-10"
-          />
-          <h4 class="fridge-inventory__card-title">Ramen Legendo</h4>
-
-          <div class="fridge-inventory__card-details flex-between">
-            <div class="fridge-inventory__card-rating">
-              <img src="assets/star.svg" alt="star" />
-              <p>4.7</p>
-            </div>
-
-            <p class="fridge-inventory__card-price">$13.00</p>
-          </div>
-        </article>
-      </div>
-
       <button class="fridge-inventory__button">
         <a href="#" id="add-item">Add item</a>
       </button>
+      <div class="fridge-inventory__catalogue1"></div>
     </section>
+
+    <!-- Add item  -->
+    <div id="add-item-form" class="hidden">
+      <div class="login-container">
+        <span class="close-btn">&times;</span>
+        <!-- Close Button -->
+        <h2>Add Item</h2>
+        <form action="" method="POST">
+          <label for="title">Title:</label>
+          <input type="text" name="title" id="title" required />
+          <label for="image">Image:</label>
+          <input type="file" name="image" id="image" alt="food-image" />
+          <label for="rating">Rating:</label>
+          <input type="number" name="rating" id="rating" required />
+          <label for="price">Price:</label>
+          <input type="number" name="price" id="price" required />
+          <button type="submit" id="add-item-btn">Add Item</button>
+        </form>
+      </div>
+    </div>
+    <!-- Update item  -->
+    <div id="update-item-form" class="hidden">
+      <div class="login-container">
+        <span class="close-btn-up">&times;</span>
+        <!-- Close Button -->
+        <h2>Update Item</h2>
+        <form action="" method="POST">
+          <label for="newtitle">New Title:</label>
+          <input type="text" name="newtitle" id="newtitle" required />
+          <label for="newimage">New Image:</label>
+          <input type="file" name="newimage" id="image" alt="food-image" />
+          <label for="newrating">New Rating:</label>
+          <input type="number" name="newrating" id="newrating" required />
+          <label for="newprice">New Price:</label>
+          <input type="number" name="newprice" id="newprice" required />
+          <button type="submit" id="update-item-btn">Update Item</button>
+        </form>
+      </div>
+    </div>
     <footer class="footer flex-between">
       <h3 class="footer__logo"><span>Fridg</span>ify</h3>
 
@@ -130,10 +93,10 @@
           <a href="index.html">Home</a>
         </li>
         <li>
-          <a href="#recipes">Recipes</a>
+          <a href="index.html/#recipes">Recipes</a>
         </li>
         <li>
-          <a href="#about-us">About Us</a>
+          <a href="index.html/#about-us">About Us</a>
         </li>
         <li>
           <a href="#">Up</a>
@@ -152,6 +115,6 @@
         </li>
       </ul>
     </footer>
-    <script src="js/script.js" type="module"></script>
+    <script src="js/fridge.js" type="module"></script>
   </body>
 </html>
