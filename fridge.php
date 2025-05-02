@@ -185,7 +185,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete-item'])) {
             <ul class="header__menu">
                 <li><a href="index.php">Home</a></li>
                 <li><a href="fridge.php">Fridge</a></li>
-                <li><a href="recipes.php">Recipes</a></li>
+                <li><a href="recipes.html">Recipes</a></li>
                 <li><a href="index.php#about-us">About Us</a></li>
                 <?php if (isset($_SESSION['username'])): ?>
                     <li class="profile-icon">
@@ -225,7 +225,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete-item'])) {
                 <h4 class="fridge-inventory__card-title"><?= htmlspecialchars($ingredient['name']) ?></h4>
 
                 <div class="fridge-inventory__card-details flex-between">
-                    <p>Quantity: <?= htmlspecialchars($ingredient['quantity']) ?></p>
+                    <p class="fridge-inventory__card-price">Quantity: <?= htmlspecialchars($ingredient['quantity']) ?></p>
                     <div class="fridge-inventory__card-rating">
                         <img src="assets/star.svg" alt="star" />
                         <p><?= htmlspecialchars($ingredient['rating']) ?></p>
@@ -286,6 +286,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete-item'])) {
             </article>
         <?php endforeach; ?>
     </div>
+    <div class="hero-content__buttons">
+    <div class="hero-content__buttons">
+    <form action="cook.php" method="POST">
+        <?php foreach ($ingredients as $ingredient): ?>
+            <input type="hidden" name="selected_ingredients[]" value="<?= htmlspecialchars($ingredient['name']) ?>">
+        <?php endforeach; ?>
+        <button type="submit" class="hero-content__cook-button">Cook Now</button>
+    </form>
+</div>
+</div>
 </section>
 
 <!-- Add Item Form -->
@@ -337,9 +347,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete-item'])) {
     <footer class="footer flex-between">
         <h3 class="footer__logo"><span>Fridg</span>ify</h3>
         <ul class="footer__nav">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="index.html/#recipes">Recipes</a></li>
-            <li><a href="index.html/#about-us">About Us</a></li>
+            <li><a href="index.php">Home</a></li>
+            <li><a href="index.php#recipes">Recipes</a></li>
+            <li><a href="index.php#about-us">About Us</a></li>
             <li><a href="#">Up</a></li>
         </ul>
         <ul class="footer__social">

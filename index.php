@@ -95,7 +95,7 @@ $sampleIngredients = [
         <li><a href="admin_dashboard.php">Users</a></li>
     <?php endif; ?>
 <?php endif; ?>
-    <li><a href="recipes.php">Recipes</a></li>
+    <li><a href="recipes.html">Recipes</a></li>
     <li><a href="#about-us">About Us</a></li>
     <?php if (isset($_SESSION['username'])): ?>
       <li class="profile-icon">
@@ -182,9 +182,7 @@ $sampleIngredients = [
             contents and find recipes based on what you have.
           </p>
         </div>
-        <div class="hero-content__buttons">
-          <a href="cook.php"><button class="hero-content__cook-button">Cook Now</button></a>
-        </div>
+        
         <div class="hero-content__testimonial" data-aos="fade-up">
           <div class="hero-content__customer flex-center">
             <h4>24<span>k+</span></h4>
@@ -209,8 +207,13 @@ $sampleIngredients = [
         </div>
 
         <button class="about-us__button">
+        <a 
+    href="https://chat.openai.com/?prompt=How%20is%20a%20website%20that%20helps%20you%20find%20recipes%20based%20on%20food%20helpful%3F" 
+    target="_blank"
+    style="text-decoration: none; color: inherit;"
+  >
           Learn More
-
+        </a>
           <img src="assets/arrow-up-right.svg" alt="learn more" />
         </button>
 

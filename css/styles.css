@@ -374,3 +374,148 @@ a {
   padding: 5px;
   cursor: pointer;
 }
+.login-container {
+  width: 400px;
+  margin: 50px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.login-container h2 {
+  text-align: center;
+  font-family: var(--playfair-display);
+  margin-bottom: 20px;
+}
+
+.login-container label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  font-family: var(--plus-jakarta-sans);
+}
+
+.login-container input,
+.login-container select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-family: var(--plus-jakarta-sans);
+}
+
+.login-container button {
+  width: 100%;
+  padding: 10px;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: var(--plus-jakarta-sans);
+}
+
+.login-container button:hover {
+  background: var(--secondary-color);
+}
+/* Styled Table */
+.styled-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 16px;
+  font-family: "Arial", sans-serif;
+  text-align: left;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.styled-table thead tr {
+  background-color: #c173a8;
+  color: #ffffff;
+  text-align: left;
+  font-weight: bold;
+}
+
+.styled-table th,
+.styled-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #dddddd;
+}
+
+.styled-table tbody tr {
+  background-color: #f9f9f9;
+  transition: background-color 0.3s ease;
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+  background-color: #f3f3f3;
+}
+
+.styled-table tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+.styled-table .action-link {
+  color: #ec8aa1;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.styled-table .action-link:hover {
+  color: #de519c;
+}
+.extra-lists {
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+}
+
+.extra-lists h2 {
+  text-align: center;
+  font-family: "Playfair Display", serif;
+  margin-bottom: 20px;
+}
+
+.list-container {
+  margin-bottom: 30px;
+}
+
+.list-container h3 {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.list-container ol,
+.list-container ul {
+  padding-left: 20px;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 16px;
+  color: #555;
+}
+
+.list-container dl {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 16px;
+  color: #555;
+}
+
+.list-container dt {
+  font-weight: bold;
+  color: #333;
+  margin-top: 10px;
+}
+
+.list-container dd {
+  margin-left: 20px;
+  margin-bottom: 10px;
+}
