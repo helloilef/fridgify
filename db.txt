@@ -92,3 +92,7 @@ INSERT INTO recipe_ingredients (recipe_id, ingredient_id) VALUES
     (SELECT id FROM recipes WHERE title = 'Ramen Special'),
     (SELECT id FROM ingredients WHERE name = 'Ramen Legendo' AND user_id = (SELECT id FROM users WHERE username = 'admin'))
 );
+
+ALTER TABLE ingredients 
+ADD COLUMN rating FLOAT AFTER quantity,
+ADD COLUMN price DECIMAL(10,2) AFTER rating;

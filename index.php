@@ -12,21 +12,31 @@ try {
     die("Database connection failed: " . $e->getMessage());
 }
 
-// Fetch user ingredients if logged in
+// Fetch ingredients based on role
 $ingredients = [];
 if (isset($_SESSION['username'])) {
-    $stmt = $pdo->prepare("SELECT id FROM users WHERE username = :username");
+    // Check if the logged-in user is an admin
+    $stmt = $pdo->prepare("SELECT role FROM users WHERE username = :username");
     $stmt->execute(['username' => $_SESSION['username']]);
-    $user = $stmt->fetch();
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($user) {
-        // Fetch ingredients directly from the ingredients table
+    if ($user && $user['role'] === 'admin') {
+        // Admin: Fetch all ingredients
         $stmt = $pdo->prepare("
-            SELECT name, image, quantity 
+            SELECT ingredients.*, users.username 
             FROM ingredients 
-            WHERE user_id = :user_id
+            JOIN users ON ingredients.user_id = users.id
         ");
-        $stmt->execute(['user_id' => $user['id']]);
+        $stmt->execute();
+        $ingredients = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } else {
+        // Normal user: Fetch only their own ingredients
+        $stmt = $pdo->prepare("
+            SELECT * 
+            FROM ingredients 
+            WHERE user_id = (SELECT id FROM users WHERE username = :username)
+        ");
+        $stmt->execute(['username' => $_SESSION['username']]);
         $ingredients = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
@@ -74,6 +84,17 @@ $sampleIngredients = [
 
         <ul class="header__menu">
     <li><a href="fridge.php">Fridge</a></li>
+    <?php if (isset($_SESSION['username'])): ?>
+    <?php
+    // Check if the logged-in user is an admin
+    $stmt = $pdo->prepare("SELECT role FROM users WHERE username = :username");
+    $stmt->execute(['username' => $_SESSION['username']]);
+    $user = $stmt->fetch();
+
+    if ($user && $user['role'] === 'admin'): ?>
+        <li><a href="admin_dashboard.php">Users</a></li>
+    <?php endif; ?>
+<?php endif; ?>
     <li><a href="recipes.php">Recipes</a></li>
     <li><a href="#about-us">About Us</a></li>
     <?php if (isset($_SESSION['username'])): ?>
@@ -162,7 +183,7 @@ $sampleIngredients = [
           </p>
         </div>
         <div class="hero-content__buttons">
-          <button class="hero-content__cook-button">Cook Now</button>
+          <a href="cook.php"><button class="hero-content__cook-button">Cook Now</button></a>
         </div>
         <div class="hero-content__testimonial" data-aos="fade-up">
           <div class="hero-content__customer flex-center">

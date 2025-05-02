@@ -5,6 +5,7 @@ session_start();
 $pdo = new PDO("mysql:host=localhost:3309;dbname=fridgify", "root", "");
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+
 // Sample elements for non-logged-in users (admin's ingredients)
 $sampleItems = [];
 $stmt = $pdo->prepare("
@@ -15,16 +16,35 @@ $stmt = $pdo->prepare("
 $stmt->execute();
 $sampleItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Fetch user-specific ingredients if logged in
-$userIngredients = [];
+// Check if the logged-in user is an admin
+$isAdmin = false;
 if (isset($_SESSION['username'])) {
+    $stmt = $pdo->prepare("SELECT role FROM users WHERE username = :username");
+    $stmt->execute(['username' => $_SESSION['username']]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    $isAdmin = $user && $user['role'] === 'admin';
+}
+
+// Fetch ingredients based on role
+$ingredients = [];
+if ($isAdmin) {
+    // Admin: Fetch all ingredients
+    $stmt = $pdo->prepare("
+        SELECT ingredients.*, users.username 
+        FROM ingredients 
+        JOIN users ON ingredients.user_id = users.id
+    ");
+    $stmt->execute();
+    $ingredients = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} else if (isset($_SESSION['username'])) {
+    // Normal user: Fetch only their own ingredients
     $stmt = $pdo->prepare("
         SELECT * 
         FROM ingredients 
         WHERE user_id = (SELECT id FROM users WHERE username = :username)
     ");
     $stmt->execute(['username' => $_SESSION['username']]);
-    $userIngredients = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $ingredients = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 // Handle Add Item
@@ -186,7 +206,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete-item'])) {
 </div>
                     </li>
                 <?php else: ?>
-                    <li><a href="#" id="login">Login</a></li>
+                    <li><a href="index.php" id="login">Login</a></li>
                 <?php endif; ?>
             </ul>
         </nav>
@@ -194,107 +214,77 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete-item'])) {
 
     <section class="fridge-inventory1" id="fridge">
     <h2 class="fridge-inventory__title">Fridge Inventory</h2>
-    <?php if (isset($_SESSION['username'])): ?>
-        <button class="fridge-inventory__button">
-            <a href="#" id="add-item">Add item</a>
-        </button>
-    <?php endif; ?>
     <div class="fridge-inventory__catalogue1">
-        <?php if (isset($_SESSION['username'])): ?>
-            <?php if (empty($userIngredients)): ?>
-                <p>Your fridge is empty. Start by adding an ingredient using the "Add Item" button!</p>
-            <?php else: ?>
-                <?php foreach ($userIngredients as $ingredient): ?>
-    <article class="fridge-inventory__card">
-        <img
-            class="fridge-inventory__card-image"
-            src="<?= htmlspecialchars($ingredient['image']) ?>"
-            alt="<?= htmlspecialchars($ingredient['name']) ?>"
-        />
-        <h4 class="fridge-inventory__card-title"><?= htmlspecialchars($ingredient['name']) ?></h4>
+        <?php foreach ($ingredients as $ingredient): ?>
+            <article class="fridge-inventory__card">
+                <img
+                    class="fridge-inventory__card-image"
+                    src="<?= htmlspecialchars($ingredient['image']) ?>"
+                    alt="<?= htmlspecialchars($ingredient['name']) ?>"
+                />
+                <h4 class="fridge-inventory__card-title"><?= htmlspecialchars($ingredient['name']) ?></h4>
 
-        <div class="fridge-inventory__card-details flex-between">
-            <div class="fridge-inventory__card-rating">
-                <img src="assets/star.svg" alt="star" />
-                <p><?= htmlspecialchars($ingredient['rating']) ?></p>
-            </div>
-            <p class="fridge-inventory__card-price">$<?= number_format($ingredient['price'], 2) ?></p>
-        </div>
+                <div class="fridge-inventory__card-details flex-between">
+                    <p>Quantity: <?= htmlspecialchars($ingredient['quantity']) ?></p>
+                    <div class="fridge-inventory__card-rating">
+                        <img src="assets/star.svg" alt="star" />
+                        <p><?= htmlspecialchars($ingredient['rating']) ?></p>
+                    </div>
+                    <p class="fridge-inventory__card-price">$<?= number_format($ingredient['price'], 2) ?></p>
+                </div>
 
-        <div class="fridge-inventory__card-actions">
-            <form method="POST" style="display:inline;">
-                <input type="hidden" name="id" value="<?= $ingredient['id'] ?>">
-                <button type="submit" name="delete-item" style="
-                width: fit-content;
+                <div class="fridge-inventory__card-actions">
+                    <!-- Update Button -->
+                    <button
+                        class="update-button"
+                        style="
+                            width: fit-content;
+                            padding: 12px 13px;
+                            margin: 18px auto 0;
+                            font-weight: 350;
+                            font-size: 12px;
+                            line-height: 12px;
+                            font-family: var(--plus-jakarta-sans);
+                            color:rgb(250, 250, 250);
+                            border: none;
+                            outline: none;
+                            background:rgb(0, 179, 42);
+                            border-radius: 64px;
+                            cursor: pointer;"
+                        type="button"
+                        data-id="<?= $ingredient['id'] ?>"
+                        data-name="<?= htmlspecialchars($ingredient['name']) ?>"
+                        data-image="<?= htmlspecialchars($ingredient['image']) ?>"
+                        data-quantity="<?= htmlspecialchars($ingredient['quantity']) ?>"
+                        data-rating="<?= htmlspecialchars($ingredient['rating']) ?>"
+                        data-price="<?= htmlspecialchars($ingredient['price']) ?>"
+                    >
+                        Update
+                    </button>
 
-  padding: 12px 13px;
-  margin: 18px auto 0;
-
-  font-weight: 350;
-  font-size: 12px;
-  line-height: 12px;
-  font-family: var(--plus-jakarta-sans);
-  color:rgb(250, 250, 250);
-
-  border: none;
-  outline: none;
-  background:rgb(179, 33, 0);
-  border-radius: 64px;
-  cursor: pointer;">Delete</button>
-            </form>
-            <button
-            class="update-button"
-                style="
-                width: fit-content;
-
-  padding: 12px 13px;
-  margin: 18px auto 0;
-
-  font-weight: 350;
-  font-size: 12px;
-  line-height: 12px;
-  font-family: var(--plus-jakarta-sans);
-  color:rgb(250, 250, 250);
-
-  border: none;
-  outline: none;
-  background:rgb(0, 179, 42);
-  border-radius: 64px;
-  cursor: pointer;"
-                type="button"
-                data-id="<?= $ingredient['id'] ?>"
-    data-name="<?= htmlspecialchars($ingredient['name']) ?>"
-    data-image="<?= htmlspecialchars($ingredient['image']) ?>"
-    data-quantity="<?= htmlspecialchars($ingredient['quantity']) ?>"
-    data-rating="<?= htmlspecialchars($ingredient['rating']) ?>"
-    data-price="<?= htmlspecialchars($ingredient['price']) ?>"
-
-            >
-                Update
-            </button>
-        </div>
-    </article>
-<?php endforeach; ?>
-            <?php endif; ?>
-        <?php else: ?>
-            <?php foreach ($sampleItems as $item): ?>
-    <article class="fridge-inventory__card">
-        <img
-            class="fridge-inventory__card-image"
-            src="<?= htmlspecialchars($item['image'] ?? 'assets/default-image.png') ?>"
-            alt="<?= htmlspecialchars($item['name'] ?? 'Unknown Name') ?>"
-        />
-        <h4 class="fridge-inventory__card-title"><?= htmlspecialchars($item['name'] ?? 'Unknown Name') ?></h4>
-        <div class="fridge-inventory__card-details flex-between">
-            <p>Quantity: <?= htmlspecialchars($item['quantity'] ?? 'Unknown Quantity') ?></p>
-            <div class="fridge-inventory__card-rating">
-    <img src="assets/star.svg" alt="star" />
-    <p><?= htmlspecialchars($ingredient['rating'] ?? '0') ?></p>
-</div>
-        </div>
-    </article>
-<?php endforeach; ?>
-        <?php endif; ?>
+                    <!-- Delete Button -->
+                    <form method="POST" style="display:inline;">
+                        <input type="hidden" name="id" value="<?= $ingredient['id'] ?>">
+                        <button type="submit" name="delete-item" style="
+                            width: fit-content;
+                            padding: 12px 13px;
+                            margin: 18px auto 0;
+                            font-weight: 350;
+                            font-size: 12px;
+                            line-height: 12px;
+                            font-family: var(--plus-jakarta-sans);
+                            color:rgb(250, 250, 250);
+                            border: none;
+                            outline: none;
+                            background:rgb(179, 33, 0);
+                            border-radius: 64px;
+                            cursor: pointer;">
+                            Delete
+                        </button>
+                    </form>
+                </div>
+            </article>
+        <?php endforeach; ?>
     </div>
 </section>
 
