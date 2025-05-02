@@ -237,19 +237,34 @@
   z-index: 1000;
 }
 
+/* Initially hide the dropdown menu */
 .hidden {
   display: none;
 }
 
-.update-btn {
-  background-color: var(--secondary-color); /* Green */
+/* Show the dropdown menu when active */
+.dropdown-menu.active {
+  display: block;
+  position: absolute;
+  top: 50px; /* Adjust based on your layout */
+  right: 0;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  z-index: 1000;
+}
+
+.dropdown-menu button {
+  background: var(--secondary-color);
+  color: #fff;
   border: none;
-  color: white;
   padding: 10px 20px;
-  text-align: center;
-  display: inline-block;
-  font-size: 16px;
-  margin: 4px 2px;
+  border-radius: 5px;
   cursor: pointer;
-  border-radius: 25px;
+  font-size: 14px;
+}
+
+.dropdown-menu button:hover {
+  background: var(--primary-color);
 }

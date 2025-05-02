@@ -1,3 +1,59 @@
+<?php
+session_start();
+$host = 'localhost:3309';
+$dbname = 'fridgify';
+$username = 'root';
+$password = '';
+
+try {
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Database connection failed: " . $e->getMessage());
+}
+
+// Fetch user ingredients if logged in
+$ingredients = [];
+if (isset($_SESSION['username'])) {
+    $stmt = $pdo->prepare("SELECT id FROM users WHERE username = :username");
+    $stmt->execute(['username' => $_SESSION['username']]);
+    $user = $stmt->fetch();
+
+    if ($user) {
+        // Fetch ingredients directly from the ingredients table
+        $stmt = $pdo->prepare("
+            SELECT name, image, quantity 
+            FROM ingredients 
+            WHERE user_id = :user_id
+        ");
+        $stmt->execute(['user_id' => $user['id']]);
+        $ingredients = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+}
+
+// Sample ingredients for non-logged-in users
+$sampleIngredients = [
+    [
+        'name' => 'Chezu Sushi',
+        'image' => 'assets/sushi-12.png',
+        'rating' => 4.9,
+        'price' => 21.00,
+    ],
+    [
+        'name' => 'Original Sushi',
+        'image' => 'assets/sushi-11.png',
+        'rating' => 5.0,
+        'price' => 19.00,
+    ],
+    [
+        'name' => 'Ramen Legendo',
+        'image' => 'assets/sushi-10.png',
+        'rating' => 4.7,
+        'price' => 13.00,
+    ],
+];
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -6,6 +62,7 @@
     <title>Fridgify</title>
     <link rel="stylesheet" href="css/styles.css" />
     <link rel="icon" type="image/png" href="assets/bibimbap.png" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
   </head>
   <body>
     <header>
@@ -16,44 +73,76 @@
         </div>
 
         <ul class="header__menu">
-          <li>
-            <a href="#fridge">Fridge</a>
-          </li>
-          <li>
-            <a href="#recipes">Recipes</a>
-          </li>
-          <li>
-            <a href="#about-us">About Us</a>
-          </li>
-          <li>
-            <a href="#" id="login">Login</a>
-          </li>
-          <li>
-            <img src="assets/search.svg" alt="search" />
-          </li>
-        </ul>
+    <li><a href="fridge.php">Fridge</a></li>
+    <li><a href="recipes.php">Recipes</a></li>
+    <li><a href="#about-us">About Us</a></li>
+    <?php if (isset($_SESSION['username'])): ?>
+      <li class="profile-icon">
+    <div class="profile-dropdown">
+        <img src="assets/sushi-12.png" alt="Profile Icon" title="<?= htmlspecialchars($_SESSION['username']) ?>" id="profile-icon">
+        <div class="dropdown-menu hidden" id="dropdown-menu">
+            <form action="logout.php" method="POST">
+                <button type="submit" class="logout-button">Logout</button>
+            </form>
+        </div>
+    </div>
+</li>
+<?php else: ?>
+        <li><a href="#" id="login">Login</a></li>
+    <?php endif; ?>
+</ul>
 
         <ul class="header__menu-mobile">
           <li><img src="assets/menu.svg" alt="menu" /></li>
         </ul>
       </nav>
     </header>
+<header>
+    
 
-    <!-- Login  -->
-    <div id="login-form" class="hidden">
-      <div class="login-container">
-        <span class="close-btn">&times;</span>
-        <!-- Close Button -->
-        <h2>Login</h2>
-        <form action="" method="POST">
-          <label for="username">Username:</label>
-          <input type="text" name="username" id="username" required />
-          <label for="password">Password:</label>
-          <input type="password" name="password" id="password" required />
-          <button type="submit" id="login-btn">Login</button>
-        </form>
-      </div>
-    </div>
+
+<!-- User Login -->
+<div id="login-form" class="hidden">
+  <div class="login-container">
+    <span class="close-btn">&times;</span>
+    <h2>Login</h2>
+    <form id="loginForm" method="POST" action="login.php">
+      <label for="username">Username:</label>
+      <input type="text" name="username" id="username" required />
+      <label for="password">Password:</label>
+      <input type="password" name="password" id="password" required />
+      <button type="submit" id="login-btn">Login</button>
+    </form>
+    <p>Don't have an account? <a href="#" id="show-signup">Sign Up</a></p>
+  </div>
+</div>
+
+
+
+<!-- User Sign-Up -->
+<div id="signup-form" class="hidden">
+  <div class="login-container">
+    <span class="close-btn">&times;</span>
+    <h2>Sign Up</h2>
+    <form id="signupForm" method="POST" action="signup.php">
+      <label for="signup-name">Name:</label>
+      <input type="text" name="name" id="signup-name" required />
+      <label for="signup-age">Age:</label>
+      <input type="number" name="age" id="signup-age" required />
+      <label for="signup-username">Username:</label>
+      <input type="text" name="username" id="signup-username" required />
+      <label for="signup-password">Password:</label>
+      <input type="password" name="password" id="signup-password" required />
+      <label for="signup-role">Role:</label>
+      <select name="role" id="signup-role" required>
+        <option value="user">User</option>
+        <option value="admin">Admin</option>
+      </select>
+      <button type="submit" id="signup-btn">Sign Up</button>
+    </form>
+    <p>Already have an account? <a href="#" id="show-login">Login</a></p>
+  </div>
+</div>
     <section class="hero">
       <div class="hero-image">
         <img
@@ -74,7 +163,6 @@
         </div>
         <div class="hero-content__buttons">
           <button class="hero-content__cook-button">Cook Now</button>
-          <button class="hero-content__signUp-button">Sign Up</button>
         </div>
         <div class="hero-content__testimonial" data-aos="fade-up">
           <div class="hero-content__customer flex-center">
@@ -123,95 +211,57 @@
     </section>
 
     <section class="fridge-inventory" id="fridge">
-      <h2 class="fridge-inventory__title" data-aos="flip-up">
-        Fridge Inventory
-      </h2>
+    <h2 class="fridge-inventory__title" data-aos="flip-up">Fridge Inventory</h2>
 
-      <div
-        class="fridge-inventory__filters sushi__hide-scrollbar"
-        data-aos="fade-up"
-      >
-        <button class="fridge-inventory__filter-btn active">All</button>
-        <button class="fridge-inventory__filter-btn">
-          <img src="/assets/sushi-9.png" alt="sushi 9" />
-          Sushi
-        </button>
-        <button class="fridge-inventory__filter-btn">
-          <img src="/assets/sushi-8.png" alt="sushi 8" />
-          Ramen
-        </button>
-        <button class="fridge-inventory__filter-btn">
-          <img src="/assets/sushi-7.png" alt="sushi 7" />
-          Udon
-        </button>
-        <button class="fridge-inventory__filter-btn">
-          <img src="/assets/sushi-6.png" alt="sushi 6" />
-          Danggo
-        </button>
-        <button class="fridge-inventory__filter-btn">All</button>
-      </div>
+    <div class="fridge-inventory__catalogue" data-aos="fade-up">
+        <?php if (isset($_SESSION['username'])): ?>
+            <?php if (empty($ingredients)): ?>
+                <p>Your fridge is empty. Add some ingredients!</p>
+            <?php else: ?>
+                <?php foreach ($ingredients as $ingredient): ?>
+                    <article class="fridge-inventory__card">
+                        <img
+                            class="fridge-inventory__card-image"
+                            src="<?= htmlspecialchars($ingredient['image']) ?>"
+                            alt="<?= htmlspecialchars($ingredient['name']) ?>"
+                        />
+                        <h4 class="fridge-inventory__card-title"><?= htmlspecialchars($ingredient['name']) ?></h4>
 
-      <div class="fridge-inventory__catalogue" data-aos="fade-up">
-        <article class="fridge-inventory__card">
-          <img
-            class="fridge-inventory__card-image"
-            src="assets/sushi-12.png"
-            alt="sushi-12"
-          />
-          <h4 class="fridge-inventory__card-title">Chezu Sushi</h4>
+                        <div class="fridge-inventory__card-details flex-between">
+                            <p>Quantity: <?= htmlspecialchars($ingredient['quantity']) ?></p>
+                        </div>
+                    </article>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        <?php else: ?>
+            <?php foreach ($sampleIngredients as $ingredient): ?>
+                <article class="fridge-inventory__card">
+                    <img
+                        class="fridge-inventory__card-image"
+                        src="<?= htmlspecialchars($ingredient['image']) ?>"
+                        alt="<?= htmlspecialchars($ingredient['name']) ?>"
+                    />
+                    <h4 class="fridge-inventory__card-title"><?= htmlspecialchars($ingredient['name']) ?></h4>
 
-          <div class="fridge-inventory__card-details flex-between">
-            <div class="fridge-inventory__card-rating">
-              <img src="assets/star.svg" alt="star" />
-              <p>4.9</p>
-            </div>
+                    <div class="fridge-inventory__card-details flex-between">
+                        <div class="fridge-inventory__card-rating">
+                            <img src="assets/star.svg" alt="star" />
+                            <p><?= htmlspecialchars($ingredient['rating']) ?></p>
+                        </div>
 
-            <p class="fridge-inventory__card-price">$21.00</p>
-          </div>
-        </article>
+                        <p class="fridge-inventory__card-price">$<?= number_format($ingredient['price'], 2) ?></p>
+                    </div>
+                </article>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </div>
 
-        <article class="fridge-inventory__card active-card">
-          <img
-            class="fridge-inventory__card-image"
-            src="assets/sushi-11.png"
-            alt="sushi-11"
-          />
-          <h4 class="fridge-inventory__card-title">Original Sushi</h4>
-
-          <div class="fridge-inventory__card-details flex-between">
-            <div class="fridge-inventory__card-rating">
-              <img src="assets/star.svg" alt="star" />
-              <p>5.0</p>
-            </div>
-
-            <p class="fridge-inventory__card-price">$19.00</p>
-          </div>
-        </article>
-
-        <article class="fridge-inventory__card">
-          <img
-            class="fridge-inventory__card-image"
-            src="assets/sushi-10.png"
-            alt="sushi-10"
-          />
-          <h4 class="fridge-inventory__card-title">Ramen Legendo</h4>
-
-          <div class="fridge-inventory__card-details flex-between">
-            <div class="fridge-inventory__card-rating">
-              <img src="assets/star.svg" alt="star" />
-              <p>4.7</p>
-            </div>
-
-            <p class="fridge-inventory__card-price">$13.00</p>
-          </div>
-        </article>
-      </div>
-
-      <button class="fridge-inventory__button">
-        <a href="/fridge.html">Explore Inventory</a>
+    <button class="fridge-inventory__button">
+        <a href="fridge.php">Explore Inventory</a>
         <img src="assets/arrow-right.svg" alt="arrow-right" />
-      </button>
-    </section>
+    </button>
+</section>
+
 
     <section class="recipes" id="recipes">
       <section class="recipes-food">
@@ -258,6 +308,9 @@
             </li>
           </ul>
         </div>
+        <div class="recipes__discover" data-aos="zoom-in">
+        <p><a href="recipes.html" >Discover</a></p>
+      </div>
 
         <div class="recipes__image flex-center">
           <img src="assets/sushi-5.png" alt="sushi-5" data-aos="fade-left" />
@@ -271,10 +324,6 @@
           </div>
         </div>
       </section>
-
-      <div class="recipes__discover" data-aos="zoom-in">
-        <p>Discover</p>
-      </div>
 
       <section class="recipes-drinks">
         <div class="recipes__image flex-center">
@@ -357,6 +406,14 @@
         </li>
       </ul>
     </footer>
-    <script src="js/script.js" type="module"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script>
+    AOS.init({
+      duration: 1000,
+      offset: 100,
+    });
+  </script>
+    <script src="js/auth.js" type="module"></script>
+
   </body>
 </html>

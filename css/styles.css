@@ -23,7 +23,7 @@
   --black-500: #555555;
   --gray-100: #888888;
 
-  --color-white: #fff;
+  --color-white: #ffffff;
   --color-creamson: #fff0de;
 }
 
@@ -317,7 +317,8 @@ a {
 }
 /* END: trending media queries */
 
-#login-form {
+#login-form,
+#signup-form {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -365,7 +366,11 @@ a {
   font-size: 22px;
   cursor: pointer;
 }
-
-.hidden {
-  display: none;
+.logout-button {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px;
+  cursor: pointer;
 }

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test Update Button</title>
+    <style>
+      .hidden {
+        display: none;
+      }
+      #update-item-form {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 300px;
+        background: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+      #update-item-form input,
+      #update-item-form button {
+        display: block;
+        width: 100%;
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Test Update Button</h1>
+
+    <!-- Simulated Update Button -->
+    <button
+      type="button"
+      class="update-button"
+      data-id="1"
+      data-name="Milk"
+      data-image="assets/milk.png"
+      data-quantity="2"
+      data-rating="4.5"
+      data-price="3.99"
+    >
+      Update
+    </button>
+
+    <!-- Update Item Form -->
+    <div id="update-item-form" class="hidden">
+      <h2>Update Item</h2>
+      <form>
+        <input type="hidden" id="update-id" />
+        <label for="newtitle">New Title:</label>
+        <input type="text" id="newtitle" />
+        <label for="newquantity">New Quantity:</label>
+        <input type="number" id="newquantity" />
+        <label for="newrating">New Rating:</label>
+        <input type="number" id="newrating" step="0.1" min="0" max="5" />
+        <label for="newprice">New Price:</label>
+        <input type="number" id="newprice" step="0.01" />
+        <button type="button" id="close-update-form">Close</button>
+      </form>
+    </div>
+
+    <script>
+      // Handle the "Update" button click
+      document.addEventListener("DOMContentLoaded", () => {
+        const updateButton = document.querySelector(".update-button");
+        const updateForm = document.getElementById("update-item-form");
+        const closeUpdateFormButton =
+          document.getElementById("close-update-form");
+
+        if (updateButton) {
+          updateButton.addEventListener("click", () => {
+            console.log("Update button clicked.");
+
+            // Get item details from data attributes
+            const id = updateButton.getAttribute("data-id");
+            const name = updateButton.getAttribute("data-name");
+            const quantity = updateButton.getAttribute("data-quantity");
+            const rating = updateButton.getAttribute("data-rating");
+            const price = updateButton.getAttribute("data-price");
+
+            console.log("Data attributes:", {
+              id,
+              name,
+              quantity,
+              rating,
+              price,
+            });
+
+            // Populate the form fields
+            document.getElementById("update-id").value = id;
+            document.getElementById("newtitle").value = name;
+            document.getElementById("newquantity").value = quantity;
+            document.getElementById("newrating").value = rating;
+            document.getElementById("newprice").value = price;
+
+            // Show the update form
+            updateForm.classList.remove("hidden");
+          });
+        }
+
+        if (closeUpdateFormButton) {
+          closeUpdateFormButton.addEventListener("click", () => {
+            updateForm.classList.add("hidden"); // Hide the form
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

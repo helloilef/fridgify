@@ -72,11 +72,11 @@
 }
 
 .hero-content__buttons {
-  margin: 41px 0 0 41px;
-
   display: flex;
-  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
   gap: 36px;
+  margin: 0 auto;
 }
 
 .hero-content__cook-button {
@@ -85,14 +85,16 @@
   min-width: 212px;
   outline: none;
   border: none;
-  background: var(--secondary-color);
+  background: #efb0b0;
 
   cursor: pointer;
 
-  color: #fff;
+  cursor: pointer;
   font-weight: 500;
   font-size: 18px;
   line-height: 23px;
+  color: var(--black-200);
+  font-family: var(--plus-jakarta-sans);
 }
 
 .hero-content__signUp-button {
