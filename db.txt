@@ -1,0 +1,94 @@
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    role ENUM('admin', 'user') NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE ingredients (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    quantity INT NOT NULL,
+    image VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE recipes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(100) NOT NULL,
+    description TEXT NOT NULL,
+    image VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE recipe_ingredients (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    recipe_id INT NOT NULL,
+    ingredient_id INT NOT NULL,
+    FOREIGN KEY (recipe_id) REFERENCES recipes(id) ON DELETE CASCADE,
+    FOREIGN KEY (ingredient_id) REFERENCES ingredients(id) ON DELETE CASCADE
+);
+ALTER TABLE users ADD COLUMN age INT NOT NULL AFTER username;
+
+-- Insert an admin into the users table
+INSERT INTO users (username, age, password, role) 
+VALUES ('admin', 35, 'adminpassword', 'admin');
+
+-- Insert a regular user into the users table
+INSERT INTO users (username, age, password, role) 
+VALUES ('user', 25, 'userpassword', 'user');
+-- Insert sample ingredients for the admin
+INSERT INTO ingredients (user_id, name, quantity, image, created_at) VALUES
+(
+    (SELECT id FROM users WHERE username = 'admin'),
+    'Chezu Sushi', 10, 'assets/sushi-12.png', NOW()
+),
+(
+    (SELECT id FROM users WHERE username = 'admin'),
+    'Original Sushi', 15, 'assets/sushi-11.png', NOW()
+),
+(
+    (SELECT id FROM users WHERE username = 'admin'),
+    'Ramen Legendo', 20, 'assets/sushi-10.png', NOW()
+);
+-- Insert sample ingredients for the user
+INSERT INTO ingredients (user_id, name, quantity, image, created_at) VALUES
+(
+    (SELECT id FROM users WHERE username = 'user'),
+    'Chezu Sushi', 5, 'assets/sushi-12.png', NOW()
+),
+(
+    (SELECT id FROM users WHERE username = 'user'),
+    'Original Sushi', 8, 'assets/sushi-11.png', NOW()
+),
+(
+    (SELECT id FROM users WHERE username = 'user'),
+    'Ramen Legendo', 12, 'assets/sushi-10.png', NOW()
+);
+-- Insert sample recipes for the admin
+INSERT INTO recipes (title, description, image, created_at) VALUES
+(
+    'Sushi Deluxe',
+    'A premium sushi recipe with fresh fish, avocado, and cucumber.',
+    'assets/sushi-recipe-1.png',
+    NOW()
+),
+(
+    'Ramen Special',
+    'A hearty ramen recipe with pork, egg, and vegetables.',
+    'assets/ramen-recipe-1.png',
+    NOW()
+);
+-- Link recipes to ingredients for the admin
+INSERT INTO recipe_ingredients (recipe_id, ingredient_id) VALUES
+(
+    (SELECT id FROM recipes WHERE title = 'Sushi Deluxe'),
+    (SELECT id FROM ingredients WHERE name = 'Chezu Sushi' AND user_id = (SELECT id FROM users WHERE username = 'admin'))
+),
+(
+    (SELECT id FROM recipes WHERE title = 'Ramen Special'),
+    (SELECT id FROM ingredients WHERE name = 'Ramen Legendo' AND user_id = (SELECT id FROM users WHERE username = 'admin'))
+);
